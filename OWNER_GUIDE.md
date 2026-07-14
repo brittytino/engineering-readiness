@@ -119,12 +119,11 @@ git push -u origin main
 ### 3. Deploy to Vercel
 1. Go to [vercel.com](https://vercel.com) → New Project
 2. Import `psgmx/engineering-readiness` from GitHub
-3. Set **Root Directory** to `website`
-4. Vercel will auto-detect Next.js and configure the build
+3. Leave the **Root Directory** empty (default).
+4. Vercel will auto-detect Next.js at the root and configure the build automatically.
 5. Add environment variables:
    - `NEXT_PUBLIC_GITHUB_OWNER` = `psgmx`
    - `NEXT_PUBLIC_GITHUB_REPO` = `engineering-readiness`
-   - (Optional) `GITHUB_TOKEN` = your token, to avoid GitHub API rate limits
 6. Deploy
 7. Copy the **Deploy Hook URL** from Settings → Git → Deploy Hooks
 

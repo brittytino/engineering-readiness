@@ -1,4 +1,3 @@
 # AI Prompts Used
-testingggg
-1. **User**: How do I build a markdown viewer in Next.js?
+1. **User**: learnt Sliding window
 2. **AI**: You can use `react-markdown` along with Tailwind Typography!

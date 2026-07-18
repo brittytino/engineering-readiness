@@ -14,6 +14,7 @@ jobs:
     name: Validate Submission
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       pull-requests: write
       statuses: write
 
@@ -89,3 +90,27 @@ jobs:
             })
         env:
           ROLL: ${{ steps.roll.outputs.roll }}
+
+      # ── Auto-merge valid student submissions ───────────────────────────────────
+      - name: Auto-merge Student PR
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          AUTHOR="${{ github.event.pull_request.user.login }}"
+          
+          echo "Checking if $AUTHOR is a collaborator or owner..."
+          # If this returns successfully, the user is a collaborator
+          if gh api repos/${{ github.repository }}/collaborators/$AUTHOR --silent 2>/dev/null; then
+            echo "Author $AUTHOR is a collaborator or owner. Skipping auto-merge."
+            exit 0
+          fi
+          
+          echo "Author $AUTHOR is a student. Submissions passed validation."
+          echo "Approving and auto-merging PR..."
+          
+          # Approve the PR (Optional but helpful if branch protection requires approvals)
+          gh pr review ${{ github.event.pull_request.number }} --approve -b "Automatic approval: submission passed all requirements. 🎉" || echo "Approval failed or not required."
+          
+          # Merge the PR (Squash merge)
+          gh pr merge ${{ github.event.pull_request.number }} --squash -d
